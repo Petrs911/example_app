@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import 'package:example_app/model/profile_model.dart';
@@ -20,10 +21,19 @@ class _MyHomePageState extends State<MyHomePage> {
       body: ListView(
         children: List.generate(profileList.length, (index) {
           final profile = profileList[index];
-          return ListTile(
-            title: Text('Name: ${profile.name}'),
-            subtitle: Text('Weight is: ${profile.weight} kg'),
-            trailing: Text('Age: ${profile.age}'),
+          return GestureDetector(
+            onTap: () async {
+              final profile =
+                  await Navigator.of(context).push(ProfileFlow.route());
+              setState(() {
+                profileList[index] = profile;
+              });
+            },
+            child: ListTile(
+              title: Text('Name: ${profile.name}'),
+              subtitle: Text('Weight is: ${profile.weight} kg'),
+              trailing: Text('Age: ${profile.age}'),
+            ),
           );
         }),
       ),
