@@ -1,3 +1,4 @@
+import 'package:example_app/globals.dart';
 import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
 
@@ -11,6 +12,7 @@ class ProfileAgeForm extends StatefulWidget {
 }
 
 class _ProfileAgeFormState extends State<ProfileAgeForm> {
+  TextEditingController _controller = TextEditingController();
   int _age;
 
   void handleFlow() {
@@ -19,6 +21,15 @@ class _ProfileAgeFormState extends State<ProfileAgeForm> {
         return profile.copyWith(age: _age);
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (globalIndex != null && profileList[globalIndex].age != null) {
+      _age = profileList[globalIndex].age;
+      _controller = TextEditingController(text: '$_age');
+    }
   }
 
   @override
@@ -33,6 +44,7 @@ class _ProfileAgeFormState extends State<ProfileAgeForm> {
           child: Column(
             children: [
               TextField(
+                controller: _controller,
                 onChanged: (value) => setState(() => _age = int.parse(value)),
                 decoration: const InputDecoration(
                   labelText: 'Age',

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flow_builder/flow_builder.dart';
 
+import '../globals.dart';
 import '../model/profile_model.dart';
 
 class ProfileNameForm extends StatefulWidget {
@@ -11,7 +12,8 @@ class ProfileNameForm extends StatefulWidget {
 }
 
 class _ProfileNameFormState extends State<ProfileNameForm> {
-  var _name = '';
+  TextEditingController _controller = TextEditingController();
+  var _name;
 
   void handleFlow() {
     context.flow<Profile>().update(
@@ -19,6 +21,15 @@ class _ProfileNameFormState extends State<ProfileNameForm> {
         return profile.copyWith(name: _name);
       },
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (globalIndex != null && profileList[globalIndex].name != null) {
+      _name = profileList[globalIndex].name;
+      _controller = TextEditingController(text: _name);
+    }
   }
 
   @override
@@ -33,6 +44,7 @@ class _ProfileNameFormState extends State<ProfileNameForm> {
           child: Column(
             children: [
               TextField(
+                controller: _controller,
                 onChanged: (value) => setState(() => _name = value),
                 decoration: const InputDecoration(
                   labelText: 'Name',
@@ -40,7 +52,7 @@ class _ProfileNameFormState extends State<ProfileNameForm> {
               ),
               ElevatedButton(
                 child: const Text('Continue'),
-                onPressed: _name.isNotEmpty ? handleFlow : null,
+                onPressed: _name != null ? handleFlow : null,
               ),
             ],
           ),
